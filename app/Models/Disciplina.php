@@ -5,20 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use \Illuminate\Database\Eloquent\SoftDeletes;
 
-class Curso extends Model
+class Disciplina extends Model
 {
     use SoftDeletes;
 
     protected $fillable = [
         'nome',
-        'duracao',
+        'carga_horaria',
+        'curso_id',
     ];
 
-    public function disciplina() {
-        return $this->hasMany('\App\Models\Disciplina');
+    public function curso() {
+        return $this->belongsTo('\App\Models\Curso');
     }
 
     public function aluno() {
-        return $this->hasMany('\App\Models\Aluno');
+        return $this->belongsToMany('\App\Models\Aluno', 'matriculas');
     }
 }

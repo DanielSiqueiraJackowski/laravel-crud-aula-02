@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Curso;
-use Illuminate\Http\Request;
+use App\Http\Requests\CursoRequest;
 
 class CursoController extends Controller
 {
@@ -11,7 +11,7 @@ class CursoController extends Controller
      * Display a listing of the resource.
      */
     public function index() {
-        $data = Curso::all();
+        $data = Curso::with(['disciplina', 'aluno'])->orderBy('nome')->get();
         return view('curso.index', compact(['data']));
     }
 
@@ -26,13 +26,10 @@ class CursoController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CursoRequest $request)
     {
-        $curso = new Curso();
-        $curso->nome = $request->nome;
-        $curso->duracao = $request->duracao;
-        $curso->save();
-
+        $validado = $request->validated();
+        Curso::create($validado);
         return redirect()->route('curso.index');
     }
 
@@ -67,14 +64,12 @@ class CursoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(CursoRequest $request, string $id)
     {
         $curso = Curso::find($id);
 
         if(isset($curso)) {
-            $curso->nome = $request->nome;
-            $curso->duracao = $request->duracao;
-            $curso->save();
+            $curso->update($request->validated());
             return redirect()->route('curso.index');
         }
 

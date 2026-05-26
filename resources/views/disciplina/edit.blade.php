@@ -1,12 +1,12 @@
 @extends('template/main',
     [
         'titulo'=>"Sistema Aula",
-        'cabecalho' => 'Alterar Curso',
+        'cabecalho' => 'Alterar Disciplina',
         'rota' => '',
     ]
 )
 @section('conteudo')
-    <form action="{{route('curso.update', $curso->id)}}" method="POST">
+    <form action="{{route('disciplina.update', $disciplina->id)}}" method="POST">
         @csrf
         @method('PUT')
         <div class="row">
@@ -17,7 +17,7 @@
                         class="form-control @error('nome') is-invalid @enderror"
                         name="nome"
                         placeholder="Nome"
-                        value="{{ $curso->nome }}"
+                        value="{{ $disciplina->nome }}"
                     />
                     <label for="nome">Nome</label>
 
@@ -34,16 +34,39 @@
                 <div class="form-floating mb-3">
                     <input
                         type="number"
-                        class="form-control @error('duracao') is-invalid @enderror"
-                        name="duracao"
-                        placeholder="Tempo de Duração"
-                        value="{{ $curso->duracao }}"
+                        class="form-control @error('carga_horaria') is-invalid @enderror"
+                        name="carga_horaria"
+                        placeholder="Carga Horária"
+                        value="{{ $disciplina->carga_horaria }}"
                     />
-                    <label for="duracao">Duração</label>
+                    <label for="carga_horaria">Carga Horária</label>
 
-                    @if($errors->has('duracao'))
+                    @if($errors->has('carga_horaria'))
                         <div class='invalid-feedback'>
-                            {{ $errors->first('duracao') }}
+                            {{ $errors->first('carga_horaria') }}
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col" >
+                <div class="input-group mb-3">
+                    <span class="input-group-text bg-secondary text-white">Curso</span>
+                    <select
+                        name="curso_id"
+                        class="form-select form-control input-required @error('curso_id') is-invalid @enderror"
+                    >
+                        @foreach ($cursos as $item)
+                            <option value="{{$item->id}}" @if($item->id == $disciplina->curso_id)) selected="true" @endif>
+                                {{ $item->nome }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @if($errors->has('curso_id'))
+                        <div class='invalid-feedback'>
+                            {{ $errors->first('curso_id') }}
                         </div>
                     @endif
                 </div>
@@ -52,7 +75,7 @@
 
         <div class="row mb-5">
             <div class="col">
-                <a href="{{route('curso.index')}}" class="btn btn-secondary btn-block align-content-center">
+                <a href="{{route('disciplina.index')}}" class="btn btn-secondary btn-block align-content-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-arrow-left-square-fill" viewBox="0 0 16 16">
                         <path d="M16 14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12zm-4.5-6.5H5.707l2.147-2.146a.5.5 0 1 0-.708-.708l-3 3a.5.5 0 0 0 0 .708l3 3a.5.5 0 0 0 .708-.708L5.707 8.5H11.5a.5.5 0 0 0 0-1z"/>
                     </svg>
